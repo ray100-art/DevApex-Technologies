@@ -1,0 +1,15 @@
+# Local tooling
+.claude/
+
+# Private business documents (kept out of the public repo)
+*.docx
+*.pdf
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# OS
+.DS_Store
+Thumbs.db

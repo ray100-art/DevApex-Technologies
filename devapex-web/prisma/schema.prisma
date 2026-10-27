@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUOTED
+  WON
+  LOST
+}
+
+enum LeadSource {
+  QUOTE_FORM
+  CONTACT_FORM
+}
+
+// Every enquiry from the website. Managed in the admin CRM (next phase).
+model Lead {
+  id           String     @id @default(cuid())
+  source       LeadSource
+  status       LeadStatus @default(NEW)
+  name         String
+  email        String
+  phone        String
+  organisation String?
+  service      String?
+  package      String?
+  budget       String?
+  timeline     String?
+  message      String
+  consent      Boolean
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  notes        LeadNote[]
+
+  @@index([status, createdAt])
+}
+
+model LeadNote {
+  id        String   @id @default(cuid())
+  leadId    String
+  lead      Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  body      String
+  createdAt DateTime @default(now())
+}
